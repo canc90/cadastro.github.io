@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Cadastro de Equipamento</title>
+</head>
+
+<body>
+    <h1>Cadastro de Equipamento</h1>
+    <form class="container" action="https://api.sheetmonkey.io/form/dcu29UNDyBET3Dp2ies7jK" method="post">
+        <div>
+            <label for="cameraId">ID da Câmera:</label>
+            <input type="text" id="cameraId" name="Id" required>
+        </div>
+        <div>
+            <label for="cameraType">Tipo de Câmera:</label>
+            <select id="cameraType" name="Tipo" required>
+                <option value="" selected disabled>Esolher</option>
+                <option value="PTZ">PTZ</option>
+                <option value="BULLET">BULLET</option>
+                <option value="LPR">LPR</option>
+                <option value="RF">RF</option>
+            </select>
+        </div>
+        <div>
+            <label for="system">Sistema:</label>
+            <select id="system" name="Sistema" required>
+                <option value="" selected disabled>Esolher</option>
+                <option value="DIGIFORT">DIGIFORT</option>
+                <option value="HOLOSENS">HOLOSENS</option>
+            </select>
+        </div>
+        <div>
+            <label for="city">Município:</label>
+            <select id="city" name="Município" required onchange="showBairros()">
+                <option value="" selected disabled>Escolher</option>
+                <option value="PORTO SEGURO">PORTO SEGURO</option>
+                <option value="SANTA CRUZ CABRALIA">SANTA CRUZ CABRALIA</option>
+                <option value="BELMONTE">BELMONTE</option>
+                <option value="EUNAPOLIS">EUNAPOLIS</option>
+                <option value="ITAGIMIRIM">ITAGIMIRIM</option>
+                <option value="ITABELA">ITABELA</option>
+                <option value="ITAPEBI">ITAPEBI</option>
+                <option value="GUARATINGA">GUARATINGA</option>
+            </select>
+
+            <div>
+                <label for="neighborhood">Bairro:</label>
+                <select id="neighborhood" name="Bairro" required>
+                    <option value="" selected disabled>Selecione um município primeiro</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="street">Rua:</label>
+                <input type="text" id="street" name="Endereço" required>
+            </div>
+
+            <div>
+                <label for="latitude">Latitude:</label>
+                <input type="text" id="latitude" name="latitude" required>
+            </div>
+            <div>
+                <label for="longitude">Longitude:</label>
+                <input type="text" id="longitude" name="longitude" required>
+            </div>
+            <div class="buttons-container">
+                <button id="getLocationButton">Obter Localização</button>
+                <button id="viewOnMapButton" onclick="visualizarNoMapa()">Visualizar no Mapa</button>
+            </div>
+            <div>
+                <label for="observations">Observações:</label>
+                <textarea id="observations" name="Observações" rows="4"></textarea>
+            </div>
+            <button type="submit">Enviar</button>
+    </form>
+</body>
+<script src="scrypt.js"></script>
+
+</html>
