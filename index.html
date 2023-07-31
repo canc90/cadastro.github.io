@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Form/style.css">
+    <link rel="stylesheet" href="style.css">
     <title>Cadastro de Equipamento</title>
 </head>
 
@@ -12,13 +12,15 @@
     <h1>Cadastro de Equipamento</h1>
     <form class="container" action="https://api.sheetmonkey.io/form/fPiuksUr4V8mbeemUFq6tZ" method="post">
         <div>
-            <label for="cameraId">ID da Câmera:</label>
-            <input type="text" id="cameraId" name="Id" required>
+            <label for="cameraId">ID da Câmera (Formato: xx-xx):</label>
+            <input value="0" type="text" id="cameraId" name="Id" pattern="[0-9]{2}-[0-9]{2}"
+                title="Digite o formato xx-xx">
         </div>
+
         <div>
             <label for="cameraType">Tipo de Câmera:</label>
             <select id="cameraType" name="Tipo" required>
-                <option value="" selected disabled>Esolher</option>
+                <option value="" selected disabled>Escolher</option>
                 <option value="PTZ">PTZ</option>
                 <option value="BULLET">BULLET</option>
                 <option value="LPR">LPR</option>
@@ -28,14 +30,24 @@
         <div>
             <label for="system">Sistema:</label>
             <select id="system" name="Sistema" required>
-                <option value="" selected disabled>Esolher</option>
+                <option value="" selected disabled>Escolher</option>
                 <option value="DIGIFORT">DIGIFORT</option>
                 <option value="HOLOSENS">HOLOSENS</option>
             </select>
         </div>
         <div>
+            <label for="status">Status:</label>
+            <select id="status" name="Status" required>
+                <option value="" selected disabled>Escolher</option>
+                <option value="INSTALAÇÃO">Instalação</option>
+                <option value="REMANEJAMENTO">Remanejamento</option>
+                <option value="TROCA DE EQUIPAMENTO">Troca de Equipamento</option>
+            </select>
+        </div>
+
+        <div>
             <label for="city">Município:</label>
-            <select id="city" name="Município" required onchange="showBairros()">
+            <select id="city" name="Município" required>
                 <option value="" selected disabled>Escolher</option>
                 <option value="PORTO SEGURO">PORTO SEGURO</option>
                 <option value="SANTA CRUZ CABRALIA">SANTA CRUZ CABRALIA</option>
@@ -46,38 +58,49 @@
                 <option value="ITAPEBI">ITAPEBI</option>
                 <option value="GUARATINGA">GUARATINGA</option>
             </select>
+        </div>
+        <div>
+            <label for="neighborhood">Bairro:</label>
+            <select id="neighborhood" name="Bairro" required>
+                <option value="" selected disabled>Selecione um município primeiro</option>
+            </select>
+        </div>
+        <div>
+            <label for="street">Rua:</label>
+            <input type="text" id="street" name="Endereço" required>
+        </div>
 
-            <div>
-                <label for="neighborhood">Bairro:</label>
-                <select id="neighborhood" name="Bairro" required>
-                    <option value="" selected disabled>Selecione um município primeiro</option>
-                </select>
-            </div>
+        <div>
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="latitude" required>
+        </div>
+        <div>
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="longitude" required>
+        </div>
+        <div>
+            <label for="provedor">Provedor:</label>
+            <select name="Provedor" id="provedor">
+                <option value="" selected disabled>Escolher</option>
+                <option value="OUTCENTER">OutCenter</option>
+                <option value="NETCENTER">NetCenter</option>
+                <option value="INFORNET">Infornet</option>
+                <option value="INFORTEL">Infortel</option>
+                <option value="OI">Oi</option>
+            </select>
+        </div>
+        <div class="buttons-container">
+            <button id="getLocationButton">Obter Localização</button>
+            <button id="viewOnMapButton">Visualizar no Mapa</button>
+        </div>
+        <div>
+            <label for="observations">Observações:</label>
+            <textarea id="observations" name="Observações" rows="4"></textarea>
+        </div>
 
-            <div>
-                <label for="street">Rua:</label>
-                <input type="text" id="street" name="Endereço" required>
-            </div>
-
-            <div>
-                <label for="latitude">Latitude:</label>
-                <input type="text" id="latitude" name="latitude" required>
-            </div>
-            <div>
-                <label for="longitude">Longitude:</label>
-                <input type="text" id="longitude" name="longitude" required>
-            </div>
-            <div class="buttons-container">
-                <button id="getLocationButton">Obter Localização</button>
-                <button id="viewOnMapButton" onclick="visualizarNoMapa()">Visualizar no Mapa</button>
-            </div>
-            <div>
-                <label for="observations">Observações:</label>
-                <textarea id="observations" name="Observações" rows="4"></textarea>
-            </div>
-            <button type="submit">Enviar</button>
+        <button type="submit">Enviar</button>
     </form>
+    <script src="script.js"></script>
 </body>
-<script src="Form/scrypt.js"></script>
 
 </html>

@@ -1,3 +1,17 @@
+// Função para preencher os campos "Latitude", "Longitude" e "Rua"
+function preencherCampos(latitude, longitude, streetName, city) {
+  document.getElementById("latitude").value = latitude.toFixed(6);
+  document.getElementById("longitude").value = longitude.toFixed(6);
+  document.getElementById("street").value = streetName;
+
+  const citySelect = document.getElementById("city");
+  const cityOption = document.querySelector(`#city option[value="${city}"]`);
+  if (cityOption) {
+    citySelect.value = city;
+    showBairros();
+  }
+}
+
 function showBairros() {
   const citySelect = document.getElementById("city");
   const neighborhoodSelect = document.getElementById("neighborhood");
@@ -72,75 +86,33 @@ function showBairros() {
       neighborhoodSelect.appendChild(option);
     }
   }
-
 }
 
-
-// Variáveis para armazenar a latitude e longitude selecionadas no mapa
-let selectedLatitude = 0;
-let selectedLongitude = 0;
-
-// Inicializar o mapa
-function initMap() {
-  const mapContainer = document.getElementById("map");
-
-  // Configuração inicial do mapa (centralizado no Brasil)
-  const mapOptions = {
-    center: { lat: -14.235, lng: -51.9253 },
-    zoom: 6,
-  };
-
-  // Criar o mapa
-  const map = new google.maps.Map(mapContainer, mapOptions);
-
-  // Adicionar marcador clicável no mapa
-  const marker = new google.maps.Marker({
-    position: { lat: -14.235, lng: -51.9253 },
-    map: map,
-    draggable: true,
-  });
-
-  // Evento para atualizar a posição do marcador quando arrastado
-  google.maps.event.addListener(marker, "dragend", function (event) {
-    selectedLatitude = event.latLng.lat();
-    selectedLongitude = event.latLng.lng();
-  });
-}
-
-// Função para preencher os campos "Latitude", "Longitude" e "Rua"
-function preencherCampos(latitude, longitude, streetName) {
-  document.getElementById("latitude").value = latitude.toFixed(6);
-  document.getElementById("longitude").value = longitude.toFixed(6);
-  document.getElementById("street").value = streetName;
-}
-
-// Função que será chamada quando o botão "Obter Localização" for clicado
+// Função para obter a localização
 function obterLocalizacao() {
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (position) {
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
 
-      // Obter o nome da rua (Geocodificação Reversa)
+      // Obter o nome da rua e cidade (Geocodificação Reversa)
       fetch(
         `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
       )
         .then((response) => response.json())
         .then((data) => {
           const streetName = data.address.road;
-          preencherCampos(latitude, longitude, streetName);
-          selectedLatitude = latitude;
-          selectedLongitude = longitude;
+          const city = data.address.city;
+          preencherCampos(latitude, longitude, streetName, city);
         })
         .catch((error) => {
           console.error("Erro ao obter o nome da rua: ", error.message);
           preencherCampos(
             latitude,
             longitude,
-            "Não foi possível obter o nome da rua."
+            "Não foi possível obter o nome da rua.",
+            "Não foi possível obter o município."
           );
-          selectedLatitude = latitude;
-          selectedLongitude = longitude;
         });
     }, function (error) {
       console.error("Erro ao obter a localização: ", error.message);
@@ -151,40 +123,6 @@ function obterLocalizacao() {
 }
 
 // Função para visualizar a localização selecionada no mapa
-function visualizarNoMapa() {
-  if (selectedLatitude !== 0 && selectedLongitude !== 0) {
-    const url = `https://www.google.com/maps/search/?api=1&query=${selectedLatitude},${selectedLongitude}`;
-    window.open(url, "_blank");
-  } else {
-    alert("Selecione uma localização no mapa antes de visualizar.");
-  }
-}
-
-// Vincula as funções aos botões
-document.getElementById("getLocationButton").addEventListener("click", obterLocalizacao);
-document.getElementById("viewOnMapButton").addEventListener("click", visualizarNoMapa);
-
-
-
-
-
-
-// Função para visualizar a localização selecionada no mapa
-function visualizarNoMapa() {
-  if (selectedLatitude !== 0 && selectedLongitude !== 0) {
-    const url = `https://www.google.com/maps/search/?api=1&query=${selectedLatitude},${selectedLongitude}`;
-    window.open(url, "_blank");
-  } else {
-    alert("Selecione uma localização no mapa antes de visualizar.");
-  }
-}
-
-// Vincula as funções aos botões
-document.getElementById("getLocationButton").addEventListener("click", obterLocalizacao);
-document.getElementById("viewOnMapButton").addEventListener("click", visualizarNoMapa);
-
-
-// Função para abrir o Google Maps com a localização
 function visualizarNoMapa() {
   const latitude = parseFloat(document.getElementById("latitude").value);
   const longitude = parseFloat(document.getElementById("longitude").value);
@@ -197,3 +135,40 @@ function visualizarNoMapa() {
   const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
   window.open(url, "_blank");
 }
+
+// Vincula as funções aos botões
+document.getElementById("getLocationButton").addEventListener("click", obterLocalizacao);
+document.getElementById("viewOnMapButton").addEventListener("click", visualizarNoMapa);
+document.getElementById("city").addEventListener("change", showBairros);
+
+
+
+
+
+
+
+
+// Seleciona o elemento input do campo "ID da Câmera"
+const cameraIdInput = document.getElementById("cameraId");
+
+// Adiciona um evento de input para o campo
+cameraIdInput.addEventListener("input", function() {
+  // Obtém o valor atual do campo
+  let value = cameraIdInput.value;
+
+  // Remove todos os caracteres diferentes de dígitos
+  value = value.replace(/\D/g, "");
+
+  // Verifica se o valor possui pelo menos 2 dígitos
+  if (value.length >= 2) {
+    // Insere o "-" após o segundo dígito
+    value = value.substring(0, 2) + "-" + value.substring(2);
+  }
+
+  // Atualiza o valor do campo
+  cameraIdInput.value = value;
+});
+
+
+
+
